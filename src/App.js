@@ -1,25 +1,26 @@
 import React from 'react';
-import logo from './logo.svg';
+import {Provider } from 'react-redux';
+import {createStore , applyMiddleware , compose} from "redux"
+import createSagaMiddleware from 'redux-saga';
+import rootReducer from './store/reducer';
+import {BrowserRouter,basename} from 'react-router-dom';
+import {Routes} from './route/route'
 import './App.css';
+
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__|| compose;
+
+const sagaMiddleware = createSagaMiddleware()
+
+const store = createStore(rootReducer,composeEnhancers(applyMiddleware(sagaMiddleware)))
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Provider store={store}>
+                <BrowserRouter basename="/task-manager">
+                    <Routes />
+                </BrowserRouter>
+            {/* <div>it will be replaced by Layout component</div> */}
+          </Provider>
   );
 }
 
